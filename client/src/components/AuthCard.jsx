@@ -11,13 +11,6 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { adminLogin, userLogin, userSignup } from "@/services/apiServices";
 import { useNavigate } from "react-router-dom";
@@ -240,6 +233,7 @@ export function LoginForm() {
                     setSignupData({ ...signupData, name: e.target.value })
                   }
                   className="bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
+                  required
                 />
               </div>
               <div className="space-y-2">
@@ -258,6 +252,7 @@ export function LoginForm() {
                     setSignupData({ ...signupData, email: e.target.value })
                   }
                   className="bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
+                  required
                 />
               </div>
               <div className="space-y-2">
@@ -276,6 +271,7 @@ export function LoginForm() {
                     setSignupData({ ...signupData, mobile: e.target.value })
                   }
                   className="bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
+                  required
                 />
               </div>
               <div className="space-y-2">
@@ -294,6 +290,7 @@ export function LoginForm() {
                     setSignupData({ ...signupData, password: e.target.value })
                   }
                   className="bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
+                  required
                 />
               </div>
               <div className="space-y-2">
@@ -301,42 +298,52 @@ export function LoginForm() {
                   htmlFor="role"
                   className="text-gray-700 dark:text-gray-300"
                 >
-                  Role
+                  Select your role
                 </Label>
-                <Select
+                <RadioGroup
                   value={signupData.role}
                   onValueChange={(value) =>
                     setSignupData({ ...signupData, role: value })
                   }
+                  className="flex space-x-4"
                 >
-                  <SelectTrigger className="bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600">
-                    <SelectValue placeholder="Select a role" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white dark:bg-gray-700">
-                    <SelectItem
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
                       value="officer"
-                      className="hover:bg-gray-100 dark:hover:bg-gray-600"
+                      id="signup-ofs"
+                      className="text-blue-600"
+                    />
+                    <Label
+                      htmlFor="signup-ofs"
+                      className="text-gray-700 dark:text-gray-300"
                     >
                       Officer
-                    </SelectItem>
-                    <SelectItem
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
                       value="investigator"
-                      className="hover:bg-gray-100 dark:hover:bg-gray-600"
+                      id="signup-ins"
+                      className="text-blue-600"
+                    />
+                    <Label
+                      htmlFor="signup-ins"
+                      className="text-gray-700 dark:text-gray-300"
                     >
                       Investigator
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                    </Label>
+                  </div>
+                </RadioGroup>
               </div>
-              <CardFooter className="p-0 pt-4">
-                <Button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all duration-300"
-                >
-                  Sign Up
-                </Button>
-              </CardFooter>
             </CardContent>
+            <CardFooter>
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all duration-300"
+              >
+                Sign Up
+              </Button>
+            </CardFooter>
           </form>
         </Card>
       </TabsContent>

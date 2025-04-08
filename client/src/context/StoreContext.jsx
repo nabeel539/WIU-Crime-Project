@@ -4,26 +4,26 @@ import { createContext, useEffect, useState } from "react";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-  const backendUrl = "http://localhost:4081";
-  const [token, setToken] = useState("");
-  const [Username, SetUsername] = useState("");
-  const [profileEmail, SetProfileEmail] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const backendUrl = "http://localhost:4082";
+  const [token, setToken] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token);
+    }
+    if (role) {
+      localStorage.setItem("role", role);
+    }
     setToken(localStorage.getItem("token"));
-    setIsAdmin(localStorage.getItem("isAdmin"));
-  }, [token, isAdmin]);
+    setRole(localStorage.getItem("role"));
+  }, [token, role]);
   const contextvalue = {
     backendUrl,
     token,
     setToken,
-    isAdmin,
-    setIsAdmin,
-    Username,
-    SetUsername,
-    profileEmail,
-    SetProfileEmail,
+    role,
+    setRole,
   };
 
   return (

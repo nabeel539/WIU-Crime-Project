@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 
 // User Signup
 export const signupUser = async (req, res) => {
-  const { name, email, mobile, password } = req.body;
+  const { name, email, mobile, password, role } = req.body;
 
   try {
     // Check if User already exists
@@ -13,6 +13,14 @@ export const signupUser = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "User already exists" });
+    }
+
+    // Validate role
+    if (!role || !["officer", "investigator"].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role. Must be either 'officer' or 'investigator'",
+      });
     }
 
     // Hash the password
@@ -25,20 +33,26 @@ export const signupUser = async (req, res) => {
       email,
       mobile,
       password: hashedPassword,
+      role,
     });
 
     // Save User to the database
     await newUser.save();
 
     // Create token
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+    const token = jwt.sign(
+      { id: newUser._id, role: newUser.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "30d",
+      }
+    );
 
     res.status(201).json({
       success: true,
       message: "Signup Successful",
       token,
+      role: newUser.role,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -67,14 +81,17 @@ export const loginUser = async (req, res) => {
     }
 
     // Create token
-    const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+    const token = jwt.sign(
+      { id: existingUser._id, role: existingUser.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "30d" }
+    );
 
     res.status(200).json({
       success: true,
       message: "Login successful",
       token,
+      role: existingUser.role,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
